@@ -147,4 +147,19 @@ class Tree
       depth(value, node.left, counter)
     end
   end
+
+  def balanced?(node = root)
+    return true if node.right.nil? && node.left.nil?
+
+    if node.right.nil?
+      height(node.left.data) == 0 ? true : false
+    elsif node.left.nil?
+      height(node.right.data) == 0 ? true : false
+    else
+      a = height(node.right.data)
+      b = height(node.left.data)
+      return false unless (a - b).between?(-1, 1)
+      balanced?(node.left) && balanced?(node.right) ? true : false
+    end
+  end
 end
