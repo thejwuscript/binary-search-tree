@@ -39,4 +39,27 @@ class Tree
     end
     node
   end
+
+  def delete(value, node = root)
+    if node.data == value
+      if node.right && node.left
+        successor = node.right
+        successor = successor.left until successor.left.nil?
+        node.data = successor.data
+        node.right = delete(successor.data, node.right)
+        return node
+      end
+      return node.right if node.right
+      return node.left if node.left
+
+      return nil
+    end
+    if node.data < value
+      node.right = delete(value, node.right)
+    elsif node.data > value
+      node.left = delete(value, node.left)
+    end
+    node
+  end
+
 end
