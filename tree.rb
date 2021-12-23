@@ -1,6 +1,5 @@
 class Tree
-  attr_accessor :array
-  attr_reader :root
+  attr_accessor :array, :root
 
   def initialize(array)
     @array = array
@@ -136,5 +135,16 @@ class Tree
     a = height(node.right.data, counter) if node.right
     b = height(node.left.data, counter) if node.left
     a.to_i > b.to_i ? a : b
+  end
+
+  def depth(value, node = root, counter = 0)
+    return counter if node.data == value
+
+    counter += 1
+    if node.data < value
+      depth(value, node.right, counter)
+    else
+      depth(value, node.left, counter)
+    end
   end
 end
