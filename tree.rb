@@ -127,4 +127,14 @@ class Tree
       array.map { |node| node.data }
     end
   end
+
+  def height(value, counter = 0)
+    node = find(value)
+    return counter if node.left.nil? && node.right.nil?
+
+    counter += 1
+    a = height(node.right.data, counter) if node.right
+    b = height(node.left.data, counter) if node.left
+    a.to_i > b.to_i ? a : b
+  end
 end
