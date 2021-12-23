@@ -72,4 +72,20 @@ class Tree
     end
   end
 
+  def level_order
+    queue = [root]
+    result = []
+    loop do
+      dequeued_node = queue.shift
+      result.push(dequeued_node)
+      queue.push(dequeued_node.left) if dequeued_node.left
+      queue.push(dequeued_node.right) if dequeued_node.right
+      break if queue.empty?
+    end
+    if block_given?
+      result.map { |node| yield(node) }
+    else
+      result.map { |node| node.data }
+    end
+  end
 end
