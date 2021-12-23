@@ -62,4 +62,14 @@ class Tree
     node
   end
 
+  def find(value, node = root)
+    return node if node.data == value
+
+    if node.data < value
+      find(value, node.right)
+    elsif node.data > value
+      find(value, node.left)
+    end
+  end
+
 end
