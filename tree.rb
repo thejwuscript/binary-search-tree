@@ -88,4 +88,43 @@ class Tree
       result.map { |node| node.data }
     end
   end
+
+  def inorder(node = root, array = [])
+    return if node.nil?
+
+    inorder(node.left, array)
+    array.push(node)
+    inorder(node.right, array)
+    if block_given?
+      array.map { |node| yield(node) }
+    else
+      array.map { |node| node.data }
+    end
+  end
+
+  def preorder(node = root, array = [])
+    return if node.nil?
+
+    array.push(node)
+    preorder(node.left, array)
+    preorder(node.right, array)
+    if block_given?
+      array.map { |node| yield(node) }
+    else
+      array.map { |node| node.data }
+    end
+  end
+
+  def postorder(node = root, array = [])
+    return if node.nil?
+
+    postorder(node.left, array)
+    postorder(node.right, array)
+    array.push(node)
+    if block_given?
+      array.map { |node| yield(node) }
+    else
+      array.map { |node| node.data }
+    end
+  end
 end
