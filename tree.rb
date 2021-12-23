@@ -162,4 +162,9 @@ class Tree
       balanced?(node.left) && balanced?(node.right) ? true : false
     end
   end
+
+  def rebalance
+    self.array = inorder
+    self.root = build_tree(array)
+  end
 end
