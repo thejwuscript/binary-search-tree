@@ -22,20 +22,18 @@ class Tree
   end
 
   def insert(value, node = root)
-    return Node.new(value) if node.nil?
-    return node if node.data == value
+    return if node == value
 
-    if node.data < value
-      node.right = insert(value, node.right)
-    elsif node.data > value
-      node.left = insert(value, node.left)
+    if node > value
+      node.left.nil? ? node.left = Node.new(value) : insert(value, node.left)
+    elsif node < value
+      node.right.nil? ? node.right = Node.new(value) : insert(value, node.right)
     end
-    node
   end
 
   def delete(value, node = root)
     return if find(value).nil?
-    
+
     if node.data == value
       if node.right && node.left
         successor = node.right
@@ -68,7 +66,7 @@ class Tree
     end
   end
 
-  def level_order
+  def level_order(&block)
     queue = [root]
     result = []
     loop do
@@ -79,46 +77,46 @@ class Tree
       break if queue.empty?
     end
     if block_given?
-      result.map { |node| yield(node) }
+      result.map(&block)
     else
       result.map { |node| node.data }
     end
   end
 
-  def inorder(node = root, array = [])
+  def inorder(node = root, array = [], &block)
     return if node.nil?
 
     inorder(node.left, array)
     array.push(node)
     inorder(node.right, array)
     if block_given?
-      array.map { |node| yield(node) }
+      array.map(&block)
     else
       array.map { |node| node.data }
     end
   end
 
-  def preorder(node = root, array = [])
+  def preorder(node = root, array = [], &block)
     return if node.nil?
 
     array.push(node)
     preorder(node.left, array)
     preorder(node.right, array)
     if block_given?
-      array.map { |node| yield(node) }
+      array.map(&block)
     else
       array.map { |node| node.data }
     end
   end
 
-  def postorder(node = root, array = [])
+  def postorder(node = root, array = [], &block)
     return if node.nil?
 
     postorder(node.left, array)
     postorder(node.right, array)
     array.push(node)
     if block_given?
-      array.map { |node| yield(node) }
+      array.map(&block)
     else
       array.map { |node| node.data }
     end
@@ -149,13 +147,14 @@ class Tree
     return true if node.right.nil? && node.left.nil?
 
     if node.right.nil?
-      height(node.left.data) == 0 ? true : false
+      height(node.left.data) == 0
     elsif node.left.nil?
-      height(node.right.data) == 0 ? true : false
+      height(node.right.data) == 0
     else
       a = height(node.right.data)
       b = height(node.left.data)
       return false unless (a - b).between?(-1, 1)
+
       balanced?(node.left) && balanced?(node.right) ? true : false
     end
   end
@@ -164,7 +163,7 @@ class Tree
     self.array = inorder
     self.root = build_tree(array)
   end
-      
+
   def pretty_print(node = @root, prefix = '', is_left = true)
     pretty_print(node.right, "#{prefix}#{is_left ? '│   ' : '    '}", false) if node.right
     puts "#{prefix}#{is_left ? '└── ' : '┌── '}#{node.data}"
